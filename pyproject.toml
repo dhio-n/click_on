@@ -1,0 +1,120 @@
+[project]
+name = "clickon"
+version = "0.1.0"
+description = "Sistema de Automação de Bipagem e Bagging (Anjun Express) padronizado"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "openpyxl>=3.1,<4.0",
+    "pydantic>=2.9,<3.0",
+    "pydantic-settings>=2.6,<3.0",
+]
+
+[tool.poetry]
+packages = [{ include = "app", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+pytest-cov = "^6.0"
+ruff = "^0.8"
+mypy = "^1.13"
+import-linter = "^2.1"
+poethepoet = "^0.31"
+types-openpyxl = "^3.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# ---------------------------------------------------------------------------
+# Tarefas: poetry run poe <tarefa>
+# ---------------------------------------------------------------------------
+[tool.poe.tasks]
+dev = "python -m app.main"
+start = "python -m app.main"
+lint = "ruff check ."
+format = "ruff format ."
+format-check = "ruff format --check ."
+typecheck = "mypy"
+arch = "lint-imports"
+test = "pytest"
+cov = "pytest --cov=app --cov-report=term-missing"
+check = ["lint", "format-check", "typecheck", "arch", "test"]
+
+# ---------------------------------------------------------------------------
+# Ruff (lint + formatação)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+extend-exclude = ["app_bipador.py"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F",  # pycodestyle + pyflakes
+    "I",            # imports ordenados
+    "N",            # nomes (PEP 8)
+    "B",            # bugbear
+    "UP",           # sintaxe moderna
+    "SIM",          # simplificações
+    "C90",          # complexidade
+    "PL",           # pylint
+    "RUF",
+    "S",            # segurança (bandit)
+    "PT",           # estilo pytest
+    "T20",          # proíbe print
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]
+"src/app/features/scanner/ui/**" = ["PLR0913", "PLR0915"]
+
+# ---------------------------------------------------------------------------
+# Mypy
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src"]
+mypy_path = "src"
+plugins = ["pydantic.mypy"]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --import-mode=importlib"
+
+# ---------------------------------------------------------------------------
+# Fronteiras de arquitetura (ver docs/ARCHITECTURE.md). `poe arch` falha se violadas.
+# Ao criar uma feature nova, adicione-a em TODOS os contratos marcados com [FEATURES].
+# ---------------------------------------------------------------------------
+[tool.importlinter]
+root_package = "app"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Camadas de cada feature: ui > (application | infra) > domain"
+type = "layers"
+containers = [
+    "app.features.scanner",  # [FEATURES]
+]
+layers = ["ui", "application | infra", "domain"]
+
+[[tool.importlinter.contracts]]
+name = "domain é puro: sem GUI, Excel ou Win32 API"
+type = "forbidden"
+source_modules = [
+    "app.features.scanner.domain",  # [FEATURES]
+]
+forbidden_modules = ["tkinter", "openpyxl", "ctypes"]
+
+[[tool.importlinter.contracts]]
+name = "shared nunca importa features"
+type = "forbidden"
+source_modules = ["app.shared"]
+forbidden_modules = ["app.features"]

@@ -1,0 +1,56 @@
+========================================================================
+⚡ SISTEMA DE AUTOMAÇÃO DE BIPAGEM - ANJUN EXPRESS
+Pasta: C:\Users\DHIONATAN\Documents\clickon
+========================================================================
+
+Este sistema foi criado para automatizar a inserção de códigos na página:
+https://manage.anjunexpress.com/expressDataCenter/sortingManagement/SortingOperation/scanBagging
+
+Como o sistema usa sua própria janela do navegador já aberta e logada,
+TODOS OS COOKIES, AUTENTICAÇÃO E SESSÃO SÃO 100% PRESERVADOS.
+
+Você tem 2 OPÇÕES prontas para usar:
+
+------------------------------------------------------------------------
+OPÇÃO 1 (RECOMENDADA): PROGRAMA VISUAL DESKTOP (iniciar.bat)
+------------------------------------------------------------------------
+1. Dê um duplo clique no arquivo:
+   iniciar.bat (ou execute app_bipador.py)
+
+2. A tela visual abrirá e carregará automaticamente os 2.438 códigos de "codigo.xlsx".
+   - Você pode ajustar o delay (ex: 1.5s padrão, ou botões rápidos 1s, 1.5s, 2s).
+   - A janela possui a opção "📌 Sempre no Topo" para ficar ao lado do seu navegador.
+
+3. Deixe o navegador aberto na página do Anjun Express com o cursor pronto no campo de bipagem.
+
+4. No programa, clique no botão verde "▶ INICIAR (F8)":
+   - O sistema fará uma contagem regressiva de 4 segundos para você dar um clique no campo de texto do Anjun.
+   - O robô irá copiar cada código (Ctrl+V), simular o ENTER e aguardar o delay configurado.
+
+5. Visualização e Controle de Erros:
+   - Você vê a tela do Anjun respondendo em tempo real.
+   - Pressione F9 para PAUSAR a qualquer momento se ver alguma mensagem de erro.
+   - Use o botão "⚠️ Marcar Último como Erro" se quiser registrar códigos com falha.
+   - Você pode exportar a qualquer momento a lista de códigos com erro para uma nova planilha Excel ("💾 Exportar Erros para Excel").
+   - Pressione ESC para PARAR de emergência.
+
+------------------------------------------------------------------------
+OPÇÃO 2: PAINEL FLUTUANTE DIRETO NO NAVEGADOR (injetor_navegador.js)
+------------------------------------------------------------------------
+Se preferir que um painel visual funcione DENTRO da própria página do Anjun:
+1. Abra a página do Anjun Express no Chrome/Edge.
+2. Pressione a tecla F12 (ou clique com botão direito -> Inspecionar) e vá na aba "Console".
+3. Abra o arquivo "injetor_navegador.js" desta pasta, copie todo o código e cole no Console, depois aperte ENTER.
+4. Um painel flutuante azul aparecerá no canto da página do Anjun.
+5. Clique em "📂 Carregar .TXT" e selecione o arquivo "codigos_extraidos.txt" desta pasta.
+6. Ajuste o delay e clique em "▶ INICIAR". O próprio script intercepta e exibe alertas de erro na caixa de logs da página!
+
+------------------------------------------------------------------------
+ARQUIVOS NESTA PASTA:
+- iniciar.bat             -> Atalho para abrir o sistema visual
+- app_bipador.py          -> Código principal do sistema visual Python
+- codigo.xlsx             -> Sua planilha original de códigos
+- codigos_extraidos.txt   -> Lista de códigos extraída para fácil uso
+- injetor_navegador.js    -> Script opcional para rodar direto no navegador
+- INSTRUCOES.txt          -> Este manual de uso
+========================================================================
